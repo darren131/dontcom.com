@@ -79,6 +79,16 @@ export default async function (eleventyConfig) {
     skipRemoteImages: true,
     filterOut: (img) => {
       return img.hasAttribute('data-remote-image');
+    },
+    errorHandler: (error, src) => {
+      console.warn(`[11ty/eleventy-img] Warning: Could not process image ${src}: ${error.message}`);
+      return false;
+    },
+    urlPattern: (src) => {
+      if (src.startsWith('data:')) return false;
+      if (src.startsWith('http')) return false;
+      if (src.startsWith('/')) return false;
+      return true;
     }
   });
 

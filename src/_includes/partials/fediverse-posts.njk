@@ -11,9 +11,9 @@
       {% if post.media_attachments and post.media_attachments.length > 0 %}
         <custom-carousel slot="image">
           {% for media in post.media_attachments %}
-            {% if media.type == "image" %}
+            {% if media.type == "image" and media.url %}
               <div class="carousel-slide">
-                <img src="{{ media.url }}" alt="{{ media.description }}" loading="lazy">
+                <img src="{{ media.url }}" alt="{{ media.description | default('') }}" loading="lazy" decoding="async">
               </div>
             {% endif %}
           {% endfor %}
@@ -30,9 +30,9 @@
               {% if threadPost.media_attachments and threadPost.media_attachments.length > 0 %}
                 <custom-carousel>
                   {% for media in threadPost.media_attachments %}
-                    {% if media.type == "image" %}
+                    {% if media.type == "image" and media.url %}
                       <div class="carousel-slide">
-                        <img src="{{ media.url }}" alt="{{ media.description }}" loading="lazy">
+                        <img src="{{ media.url }}" alt="{{ media.description | default('') }}" loading="lazy" decoding="async">
                       </div>
                     {% endif %}
                   {% endfor %}

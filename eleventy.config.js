@@ -64,6 +64,16 @@ export default async function (eleventyConfig) {
         sizes: 'auto'
       },
       pictureAttributes: {}
+    },
+    defaultAttributes: {
+      loading: 'lazy',
+      decoding: 'async'
+    },
+    skipMissingImages: true,
+    fallbackWidth: 800,
+    cacheOptions: {
+      duration: '1d',
+      directory: '.cache/eleventy-img'
     }
   });
 

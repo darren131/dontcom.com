@@ -4,5 +4,4 @@ description: 'Eleventy Fetch fetches and caches resources - at configurable inte
 date: 2022-08-28
 tags: ['fetch', 'feature']
 ---
-
-{% include "partials/fediverse-posts.njk" %}
+hello

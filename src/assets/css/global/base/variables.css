@@ -6,7 +6,7 @@
   --transition-duration: 250ms;
   --transition-timing: ease;
   --wrapper-width: 85rem;
-  --tracking: -0.05ch;
+  --tracking: 0;
   --tracking-s: -0.075ch;
   --tracking-wide: 0.05ch;
 
@@ -33,7 +33,7 @@
 :root[data-theme='light'] {
   --color-text: var(--color-gray-800);
   --color-bg: var(--color-gray-100);
-
+  --color-nav-bg: #fafafa;
   --color-primary: var(--color-pink);
   --color-secondary: var(--color-blue);
   --color-tertiary: var(--color-gold);
@@ -48,6 +48,7 @@
   :root {
     --color-text: var(--color-gray-100);
     --color-bg: var(--color-gray-800);
+    --color-nav-bg: #333;
 
     --color-primary: var(--color-pink-subdued);
     --color-secondary: var(--color-blue-subdued);
@@ -61,6 +62,7 @@
 :root[data-theme='dark'] {
   --color-text: var(--color-gray-100);
   --color-bg: var(--color-gray-800);
+  --color-nav-bg: #333;
 
   --color-primary: var(--color-pink-subdued);
   --color-secondary: var(--color-blue-subdued);

@@ -1,12 +1,7 @@
 .site-header {
-  --gutter: var(--space-s);
   text-align: center;
-  padding-top: 2rem;
-}
-
-.logo {
-  margin: auto;
-  display: inline-block;
+  padding-top: var(--space-xl);
+  position: relative;
 }
 
 .site-name,

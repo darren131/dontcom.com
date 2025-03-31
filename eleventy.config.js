@@ -78,16 +78,30 @@ export default async function (eleventyConfig) {
     },
     skipRemoteImages: true,
     filterOut: (img) => {
-      return img.hasAttribute('data-remote-image');
+      // Skip remote images
+      if (img.hasAttribute('data-remote-image')) return true;
+      // Skip favicon and root-level images
+      const src = img.getAttribute('src') || '';
+      if (src.includes('icon-') || src.includes('favicon') || src.startsWith('/')) return true;
+      return false;
     },
     errorHandler: (error, src) => {
+      // Skip favicon and root-level image errors
+      if (src.includes('icon-') || src.includes('favicon') || src.startsWith('/')) {
+        return false;
+      }
       console.warn(`[11ty/eleventy-img] Warning: Could not process image ${src}: ${error.message}`);
       return false;
     },
     urlPattern: (src) => {
+      // Skip data URLs
       if (src.startsWith('data:')) return false;
+      // Skip remote images
       if (src.startsWith('http')) return false;
+      // Skip root-level images
       if (src.startsWith('/')) return false;
+      // Skip favicon images
+      if (src.includes('icon-') || src.includes('favicon')) return false;
       return true;
     }
   });

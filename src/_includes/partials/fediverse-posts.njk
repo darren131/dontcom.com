@@ -13,7 +13,17 @@
           {% for media in post.media_attachments %}
             {% if media.type == "image" and media.url %}
               <div class="carousel-slide">
-                <img src="{{ media.url }}" alt="{{ media.description | default('') }}" loading="lazy" decoding="async">
+                {% set imageUrl = media.url %}
+                {% if imageUrl starts with "http" %}
+                  {% set imageUrl = imageUrl | replace("http://", "https://") %}
+                {% endif %}
+                <img 
+                  src="{{ imageUrl }}" 
+                  alt="{{ media.description | default('') }}" 
+                  loading="lazy" 
+                  decoding="async"
+                  onerror="this.style.display='none'"
+                >
               </div>
             {% endif %}
           {% endfor %}
@@ -32,7 +42,17 @@
                   {% for media in threadPost.media_attachments %}
                     {% if media.type == "image" and media.url %}
                       <div class="carousel-slide">
-                        <img src="{{ media.url }}" alt="{{ media.description | default('') }}" loading="lazy" decoding="async">
+                        {% set imageUrl = media.url %}
+                        {% if imageUrl starts with "http" %}
+                          {% set imageUrl = imageUrl | replace("http://", "https://") %}
+                        {% endif %}
+                        <img 
+                          src="{{ imageUrl }}" 
+                          alt="{{ media.description | default('') }}" 
+                          loading="lazy" 
+                          decoding="async"
+                          onerror="this.style.display='none'"
+                        >
                       </div>
                     {% endif %}
                   {% endfor %}

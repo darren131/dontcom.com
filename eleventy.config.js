@@ -74,6 +74,16 @@ export default async function (eleventyConfig) {
     cacheOptions: {
       duration: '1d',
       directory: '.cache/eleventy-img'
+    },
+    remoteImageCache: true,
+    remoteImageCacheOptions: {
+      duration: '1d',
+      directory: '.cache/eleventy-img/remote'
+    },
+    fetchOptions: {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; Eleventy/1.0)'
+      }
     }
   });
 

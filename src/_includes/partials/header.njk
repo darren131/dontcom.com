@@ -1,0 +1,11 @@
+<header class="site-header | flow">
+  <a href="#main" class="skip-link">{{ meta.skipContent }}</a>
+
+  <a href="/" class="logo" {% if page.url == "/" %}aria-current="page"{% endif %}>
+    {% image '/assets/images/darren.png', "Portrait of a bearded man wearing large glasses and a baseball cap, dramatically lit in contrasting red and green colors against a neutral background. It's me!" %}
+  </a>
+  <h1 class="site-name">{{ meta.siteName }}</h1>
+  <h2 class="site-description">{{ meta.siteDescription }}</h2>
+  {% include "partials/main-nav.njk" %}
+  </div>
+</header>

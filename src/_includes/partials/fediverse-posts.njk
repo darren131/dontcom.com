@@ -1,0 +1,65 @@
+{% for post in fediverse.mastodon %}
+  <custom-card>
+    <div slot="headline">
+      <a href="{{ post.url }}" target="_blank" rel="noopener noreferrer">
+        {{ post.content | safe }}
+      </a>
+    </div>
+    <span slot="date">{{ post.created_at | date("YYYY-MM-DD HH:mm") }}</span>
+    
+    {% if post.media_attachments %}
+      <custom-carousel slot="image">
+        {% for media in post.media_attachments %}
+          <div class="carousel-slide">
+            {% if media.type == "image" %}
+              <img src="{{ media.url }}" alt="{{ media.description }}" loading="lazy">
+            {% endif %}
+          </div>
+        {% endfor %}
+      </custom-carousel>
+    {% endif %}
+
+    {% if post.is_thread %}
+      <div slot="content" class="thread-posts">
+        {% for threadPost in post.thread_posts %}
+          <div class="thread-post">
+            <div class="thread-content">
+              {{ threadPost.content | safe }}
+            </div>
+            {% if threadPost.media_attachments %}
+              <custom-carousel>
+                {% for media in threadPost.media_attachments %}
+                  <div class="carousel-slide">
+                    {% if media.type == "image" %}
+                      <img src="{{ media.url }}" alt="{{ media.description }}" loading="lazy">
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </custom-carousel>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </custom-card>
+{% endfor %}
+
+{% css "local" %}
+  .thread-posts {
+    margin-top: var(--space-m);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--color-bg-accent);
+  }
+
+  .thread-post {
+    margin-bottom: var(--space-m);
+  }
+
+  .thread-post:last-child {
+    margin-bottom: 0;
+  }
+
+  .thread-content {
+    margin-bottom: var(--space-s);
+  }
+{% endcss %} 

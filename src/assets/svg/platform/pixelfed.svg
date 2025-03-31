@@ -1,0 +1,11 @@
+<svg
+  viewBox="0 0 24 24"
+  width="1em"
+  height="1em"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  xmlns="http://www.w3.org/2000/svg"
+>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M250 500C388.071 500 500 388.071 500 250C500 111.929 388.071 0 250 0C111.929 0 0 111.929 0 250C0 388.071 111.929 500 250 500ZM164.5 368V196C164.5 172.252 183.724 153 207.472 153H283.5C379 153 380 304.5 283.5 304.5H231.5L164.5 368Z" fill="currentColor"/>
+</svg>

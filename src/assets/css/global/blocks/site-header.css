@@ -1,0 +1,30 @@
+.site-header {
+  --gutter: var(--space-s);
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.logo {
+  margin: auto;
+  display: inline-block;
+}
+
+.site-name,
+.site-description {
+  margin: 0 0 0.5rem 0;
+  font-size: var(--size-step-min-1);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.site-description {
+  font-weight: 400;
+  color: var(--color-gray-400);
+  letter-spacing: 0;
+}
+
+.logo picture {
+  display: block;
+  width: 60px;
+  height: 60px;
+}

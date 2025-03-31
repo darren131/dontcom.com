@@ -1,0 +1,106 @@
+<!-- Media carousel component for displaying multiple images -->
+<script webc:setup>
+  let currentIndex = 0;
+  let totalSlides = 0;
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateCarousel();
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    updateCarousel();
+  }
+
+  function updateCarousel() {
+    const slides = this.querySelectorAll('.carousel-slide');
+    slides.forEach((slide, index) => {
+      slide.style.display = index === currentIndex ? 'block' : 'none';
+    });
+    this.querySelector('.carousel-counter').textContent = `${currentIndex + 1} / ${totalSlides}`;
+  }
+
+  function initCarousel() {
+    const slides = this.querySelectorAll('.carousel-slide');
+    totalSlides = slides.length;
+    if (totalSlides > 1) {
+      this.querySelector('.carousel-controls').style.display = 'flex';
+      this.querySelector('.carousel-counter').style.display = 'block';
+    }
+    updateCarousel();
+  }
+</script>
+
+<style>
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .carousel-slide {
+    display: none;
+    width: 100%;
+  }
+
+  .carousel-slide:first-child {
+    display: block;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-medium);
+  }
+
+  .carousel-controls {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+
+  .carousel-button {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-medium);
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .carousel-button:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .carousel-counter {
+    display: none;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-medium);
+    font-size: 0.875rem;
+  }
+</style>
+
+<custom-carousel webc:root class="carousel-container">
+  <slot></slot>
+  <div class="carousel-controls">
+    <button class="carousel-button" @click="prevSlide">←</button>
+    <button class="carousel-button" @click="nextSlide">→</button>
+  </div>
+  <div class="carousel-counter"></div>
+  <script webc:raw>
+    this.initCarousel();
+  </script>
+</custom-carousel> 

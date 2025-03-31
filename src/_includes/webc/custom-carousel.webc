@@ -1,43 +1,68 @@
 <!-- Media carousel component for displaying multiple images -->
 <script webc:setup>
-  let currentIndex = 0;
-  let totalSlides = 0;
+  // Simple state management
+  this.state = {
+    currentIndex: 0,
+    totalSlides: 0
+  };
 
-  function nextSlide() {
-    currentIndex = (currentIndex + 1) % totalSlides;
-    updateCarousel();
-  }
+  // Event handlers
+  this.handleNext = () => {
+    this.state.currentIndex = (this.state.currentIndex + 1) % this.state.totalSlides;
+    this.updateDisplay();
+  };
 
-  function prevSlide() {
-    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-    updateCarousel();
-  }
+  this.handlePrev = () => {
+    this.state.currentIndex = (this.state.currentIndex - 1 + this.state.totalSlides) % this.state.totalSlides;
+    this.updateDisplay();
+  };
 
-  function updateCarousel() {
+  // Display updates
+  this.updateDisplay = () => {
     const slides = this.querySelectorAll('.carousel-slide');
     slides.forEach((slide, index) => {
-      slide.style.display = index === currentIndex ? 'block' : 'none';
+      slide.style.display = index === this.state.currentIndex ? 'block' : 'none';
     });
-    this.querySelector('.carousel-counter').textContent = `${currentIndex + 1} / ${totalSlides}`;
-  }
-
-  function initCarousel() {
-    const slides = this.querySelectorAll('.carousel-slide');
-    totalSlides = slides.length;
-    if (totalSlides > 1) {
-      this.querySelector('.carousel-controls').style.display = 'flex';
-      this.querySelector('.carousel-counter').style.display = 'block';
+    
+    const counter = this.querySelector('.carousel-counter');
+    if (counter) {
+      counter.textContent = `${this.state.currentIndex + 1} / ${this.state.totalSlides}`;
     }
-    updateCarousel();
-  }
+  };
+
+  // Initialization
+  this.init = () => {
+    const slides = this.querySelectorAll('.carousel-slide');
+    this.state.totalSlides = slides.length;
+    
+    if (this.state.totalSlides > 1) {
+      const controls = this.querySelector('.carousel-controls');
+      const counter = this.querySelector('.carousel-counter');
+      controls.classList.add('visible');
+      counter.classList.add('visible');
+      this.updateCounter();
+    }
+    
+    this.updateDisplay();
+  };
 </script>
 
 <style>
+  :host {
+    display: block;
+    width: 100%;
+    margin: var(--space-s) 0;
+  }
+
   .carousel-container {
     position: relative;
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
+    display: block;
+    background: var(--color-bg-accent);
+    border-radius: var(--border-radius-medium);
+    overflow: hidden;
   }
 
   .carousel-slide {
@@ -53,6 +78,10 @@
     width: 100%;
     height: auto;
     border-radius: var(--border-radius-medium);
+    display: block;
+    max-width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
   }
 
   .carousel-controls {
@@ -64,6 +93,11 @@
     transform: translateY(-50%);
     justify-content: space-between;
     padding: 0 1rem;
+    z-index: 10;
+  }
+
+  .carousel-controls.visible {
+    display: flex;
   }
 
   .carousel-button {
@@ -90,17 +124,30 @@
     padding: 0.25rem 0.5rem;
     border-radius: var(--border-radius-medium);
     font-size: 0.875rem;
+    z-index: 10;
+  }
+
+  .carousel-counter.visible {
+    display: block;
   }
 </style>
 
-<custom-carousel webc:root class="carousel-container">
+<div class="carousel-container">
   <slot></slot>
   <div class="carousel-controls">
-    <button class="carousel-button" @click="prevSlide">←</button>
-    <button class="carousel-button" @click="nextSlide">→</button>
+    <button class="carousel-button" @click="handlePrev">←</button>
+    <button class="carousel-button" @click="handleNext">→</button>
   </div>
   <div class="carousel-counter"></div>
-  <script webc:raw>
-    this.initCarousel();
-  </script>
-</custom-carousel> 
+</div>
+
+<script webc:raw>
+  // Initialize the carousel after the component is mounted
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('custom-carousel').forEach(carousel => {
+      if (typeof carousel.init === 'function') {
+        carousel.init();
+      }
+    });
+  });
+</script> 

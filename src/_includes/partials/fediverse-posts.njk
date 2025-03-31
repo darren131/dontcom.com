@@ -1,48 +1,52 @@
-{% for post in fediverse.mastodon %}
-  <custom-card>
-    <div slot="headline">
-      <a href="{{ post.url }}" target="_blank" rel="noopener noreferrer">
-        {{ post.content | safe }}
-      </a>
-    </div>
-    <span slot="date">{{ post.created_at | date("YYYY-MM-DD HH:mm") }}</span>
-    
-    {% if post.media_attachments %}
-      <custom-carousel slot="image">
-        {% for media in post.media_attachments %}
-          <div class="carousel-slide">
-            {% if media.type == "image" %}
-              <img src="{{ media.url }}" alt="{{ media.description }}" loading="lazy">
-            {% endif %}
-          </div>
-        {% endfor %}
-      </custom-carousel>
-    {% endif %}
-
-    {% if post.is_thread %}
-      <div slot="content" class="thread-posts">
-        {% for threadPost in post.thread_posts %}
-          <div class="thread-post">
-            <div class="thread-content">
-              {{ threadPost.content | safe }}
-            </div>
-            {% if threadPost.media_attachments %}
-              <custom-carousel>
-                {% for media in threadPost.media_attachments %}
-                  <div class="carousel-slide">
-                    {% if media.type == "image" %}
-                      <img src="{{ media.url }}" alt="{{ media.description }}" loading="lazy">
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              </custom-carousel>
-            {% endif %}
-          </div>
-        {% endfor %}
+{% if fediverse.mastodon.length > 0 %}
+  {% for post in fediverse.mastodon %}
+    <custom-card>
+      <div slot="headline">
+        <a href="{{ post.url }}" target="_blank" rel="noopener noreferrer">
+          {{ post.content | safe | trim }}
+        </a>
       </div>
-    {% endif %}
-  </custom-card>
-{% endfor %}
+      <span slot="date">{{ post.created_at | formatDate("YYYY-MM-DD HH:mm") }}</span>
+      
+      {% if post.media_attachments and post.media_attachments.length > 0 %}
+        <custom-carousel slot="image">
+          {% for media in post.media_attachments %}
+            {% if media.type == "image" %}
+              <div class="carousel-slide">
+                <img src="{{ media.url }}" alt="{{ media.description }}" loading="lazy">
+              </div>
+            {% endif %}
+          {% endfor %}
+        </custom-carousel>
+      {% endif %}
+
+      {% if post.is_thread and post.thread_posts and post.thread_posts.length > 0 %}
+        <div slot="content" class="thread-posts">
+          {% for threadPost in post.thread_posts %}
+            <div class="thread-post">
+              <div class="thread-content">
+                {{ threadPost.content | safe | trim }}
+              </div>
+              {% if threadPost.media_attachments and threadPost.media_attachments.length > 0 %}
+                <custom-carousel>
+                  {% for media in threadPost.media_attachments %}
+                    {% if media.type == "image" %}
+                      <div class="carousel-slide">
+                        <img src="{{ media.url }}" alt="{{ media.description }}" loading="lazy">
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </custom-carousel>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </custom-card>
+  {% endfor %}
+{% else %}
+  <p>No posts found.</p>
+{% endif %}
 
 {% css "local" %}
   .thread-posts {
@@ -61,5 +65,12 @@
 
   .thread-content {
     margin-bottom: var(--space-s);
+  }
+
+  /* Debug info */
+  .debug-info {
+    font-size: 0.8em;
+    color: var(--color-text-muted);
+    margin-top: var(--space-s);
   }
 {% endcss %} 

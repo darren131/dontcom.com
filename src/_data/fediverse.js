@@ -10,7 +10,7 @@ async function lookupAccount(baseUrl, acct) {
 }
 
 async function fetchStatuses(baseUrl, userId) {
-  let url = `${baseUrl}/api/v1/accounts/${userId}/statuses?exclude_replies=true&exclude_reblogs=true`;
+  let url = `${baseUrl}/api/v1/accounts/${userId}/statuses?exclude_replies=false&exclude_reblogs=true&include_media=true&include_media_description=true&include_media_metadata=true&limit=40`;
   let data = await EleventyFetch(url, {
     duration: '1h',
     type: 'json'
@@ -34,7 +34,8 @@ function processMediaAttachments(mediaAttachments) {
     url: media.url,
     preview_url: media.preview_url,
     description: media.description || '',
-    type: media.type
+    type: media.type,
+    meta: media.meta || {}
   }));
 }
 
@@ -95,12 +96,44 @@ export default async function () {
   try {
     // Fetch Mastodon posts
     let mastodonUserId = await lookupAccount(mastodonBaseUrl, mastodonAcct);
+    console.log(`[Fediverse] Found user ID: ${mastodonUserId}`);
+    
     let posts = await fetchStatuses(mastodonBaseUrl, mastodonUserId);
+    console.log(`[Fediverse] Fetched ${posts.length} posts`);
+    
+    // Log a sample post to see its structure
+    if (posts.length > 0) {
+      console.log('[Fediverse] Sample post structure:', {
+        id: posts[0].id,
+        has_media: !!posts[0].media_attachments,
+        media_count: posts[0].media_attachments?.length || 0,
+        is_reply: !!posts[0].in_reply_to_id,
+        media_attachments: posts[0].media_attachments || []
+      });
+    }
     
     // Process and group posts
     fediverse.mastodon = groupThreadedPosts(posts);
+    
+    // Log summary of processed data
+    console.log('[Fediverse] Processed data summary:', {
+      total_posts: fediverse.mastodon.length,
+      posts_with_media: fediverse.mastodon.filter(p => p.media_attachments?.length > 0).length,
+      threaded_posts: fediverse.mastodon.filter(p => p.is_thread).length,
+      posts_with_media_details: fediverse.mastodon
+        .filter(p => p.media_attachments?.length > 0)
+        .map(p => ({
+          id: p.id,
+          media_count: p.media_attachments.length,
+          media_types: p.media_attachments.map(m => m.type)
+        }))
+    });
   } catch (err) {
-    console.error('Error fetching Mastodon posts:', err);
+    console.error('[Fediverse] Error fetching Mastodon posts:', err.message);
+    if (err.response) {
+      console.error('[Fediverse] Response status:', err.response.status);
+      console.error('[Fediverse] Response data:', err.response.data);
+    }
   }
 
   return fediverse;

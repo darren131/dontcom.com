@@ -1,4 +1,4 @@
-export const url = process.env.URL || 'https://dev.dontcom.com';
+export const url = process.env.URL || 'https://darren131.github.io';
 export const siteName = 'Darren Wood';
 export const siteDescription = 'Digital design director. Internet enthusiast.';
 export const siteType = 'Person'; // schema
